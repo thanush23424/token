@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract AmazonShoppingContract {
+
+    mapping(uint256 => uint256) public appleBasket;  // Apple ID to price mapping
+    uint256 public totalBuys;
+
+    function addApple(uint256 _appleId, uint256 _price) external {
+        // Assert that the price of the apple is greater than 0
+        assert(_price > 0);
+
+        // Require apple price to be in hundreds for deferred payment option
+        require(_price % 100 == 0, "Deferred payment not available for this apple");
+
+        // Add apple to the basket
+        appleBasket[_appleId] = _price;
+    }
+
+    function completeBuy(uint256 _applesBought) external {
+        // Revert if the apples bought using deferred payment option is more than 25
+        if (_applesBought > 10) {
+            revert("300 bonus credits credited to your account");
+        }
+
+        // Update total buys
+        totalBuys += _applesBought;
+    }
+
+}
